@@ -1,6 +1,8 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.10'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.sonarqube' version '3.3'
+    id 'jacoco'
 	id 'java'
 }
 
@@ -19,11 +21,11 @@ ext {
 }
 
 dependencies {
-	// Spring Boot
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.data:spring-data-envers'
+    // Spring Boot
+    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.data:spring-data-envers'
 
     // Swagger
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
@@ -32,10 +34,43 @@ dependencies {
     // PostgreSQL
     //runtimeOnly 'org.postgresql:postgresql'
 
-	// Tests
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Tests
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+    // Apache Commons
+    implementation "commons-io:commons-io:${apacheCommonsVersion}"
+    implementation "commons-lang:commons-lang:${apacheCommonsLangVersions}"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Caiuzu_crud"
+        property "sonar.organization", "caiuzu"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.exclusions',
+                "src/main/java/br/com/simple/crud/CrudApplication.java," +
+                        "src/main/java/br/com/simple/crud/config/**"
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    test.finalizedBy jacocoTestReport
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+
+    afterEvaluate {
+        getClassDirectories().from(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ["src/main/java/br/com/hello/world/HelloWorldApplication.java," +
+                                      "src/main/java/br/com/hello/world/config/**"]
+            )
+        }))
+    }
 }
