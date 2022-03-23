@@ -16,24 +16,48 @@
 - [x] Spring Initializr
 - [x] Spring Boot
 - [X] Gradle
-- [x] Actuator
-- [x] Springfox Swagger
-- [X] JUnit
+- [X] Actuator
+- [ ] Springfox Swagger
+- [ ] JUnit
 - [ ] Mockito
-- [X] Cucumber
-- [x] SonarCloud
-- [x] CI/CD (GitHub Actions)
-- [x] Commit Semântico
+- [ ] Cucumber
+- [ ] SonarCloud
+- [ ] CI/CD (GitHub Actions)
+- [ ] Commit Semântico
+
+- [ ] PostgreSQL
+- [ ] Lombok
+- [ ] Pagination
+
 - [ ] JPA
 - [ ] Audited JPA Envers
 - [ ] Validator
+
+- [ ] Tratamento de Exceptions
+
 - [ ] Docker
 - [ ] Heroku
+
 - [ ] New Relic
-- [ ] Tratamento de Exceptions
-- [ ] Pagination
+
+
+---
+
+### Tecnologias a serem estudadas em projetos futuros:
+
+- [ ] Apache Kafka
+- [ ] Hystrix
+- [ ] Spark
+- [ ] AWS (AWS LocalStack)
+  - [ ] S3
+  - [ ] EC2
+- [ ] Kubernetes
 - [ ] Lombok
-- [ ] PostgreSQL
+- [ ] Sleuth
+- [ ] Zipkin UI
+- [ ] Liquibase
+- [ ] Spring Cloud Config (Remote Configuration)
+- [ ] Spring Cloud Bus
 
 ---
 
