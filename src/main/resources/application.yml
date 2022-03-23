@@ -1,1 +1,7 @@
-
+server:
+  port: 8080
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
