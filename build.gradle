@@ -18,6 +18,7 @@ ext {
     set('springBootVersion', "2.5.10")
     set('apacheCommonsVersion', "2.7")
     set('apacheCommonsLangVersions', "2.6")
+    set('cucumberVersion', "7.2.3")
 }
 
 dependencies {
@@ -36,6 +37,9 @@ dependencies {
 
     // Tests
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
 
     // Apache Commons
     implementation "commons-io:commons-io:${apacheCommonsVersion}"
