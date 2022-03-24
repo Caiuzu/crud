@@ -4,6 +4,12 @@
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Caiuzu/crud)
 ![ViewCount](https://views.whatilearened.today/views/github/Caiuzu/crud.svg)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=bugs)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=code_smells)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=ncloc)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=coverage)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
+[![Java CI with Gradle](https://github.com/Caiuzu/crud/actions/workflows/gradle.yml/badge.svg)](https://github.com/Caiuzu/crud/actions/workflows/gradle.yml)
+
 ---
 
 ### Resumo:
@@ -17,13 +23,15 @@
 - [x] Spring Boot
 - [X] Gradle
 - [X] Actuator
-- [ ] Springfox Swagger
-- [ ] JUnit
+- [X] Springfox Swagger
+- [X] JUnit 5
+- [X] Cucumber
+- [X] SonarCloud
+- [X] CI/CD (GitHub Actions)
+- [X] Commit Semântico
+- [X] Discord Webhook
+
 - [ ] Mockito
-- [ ] Cucumber
-- [ ] SonarCloud
-- [ ] CI/CD (GitHub Actions)
-- [ ] Commit Semântico
 
 - [ ] PostgreSQL
 - [ ] Lombok
@@ -37,7 +45,6 @@
 
 - [ ] Docker
 - [ ] Heroku
-
 - [ ] New Relic
 
 
