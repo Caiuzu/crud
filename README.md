@@ -13,10 +13,13 @@
 
 ### Resumo:
 
-> Este projeto tem por intuito introduzir o desenvolvedor a algumas tecnologias e ferramentas complementares, vastamente utilizadas no dia-a-dia.
+> Este projeto tem por intuito introduzir o desenvolvedor a algumas tecnologias e ferramentas complementares, vastamente
+> utilizadas no dia-a-dia.
 > Através de um CRUD simples, implementaremos os itens descritos abaixo.
 
 ## Tecnologias/Ferramentas Utilizadas no Projeto:
+
+##### Tecnologias utilizadas e explicadas previamente no projeto [hello-world](https://github.com/Caiuzu/hello-world):
 
 - [x] Spring Initializr
 - [x] Spring Boot
@@ -30,26 +33,67 @@
 - [X] Commit Semântico
 - [X] Discord Webhook
 
-- [X] PostgreSQL
+##### Novas Tecnologias:
+
 - [X] Docker
-- [X] Portainer.io
+    - [X] Portainer.io
+    - [X] PostgreSQL
 
-- [ ] Mockito
+- [ ] ORM
+  - [X] Hibernate
+  - [X] JPA
+    - [ ] Audited JPA Envers 
 
-- [ ] Lombok
-- [ ] Pagination
+- [ ] Testes
+  - [ ] Mockito
+  - [ ] Factory
 
-- [ ] Hibernate
-- [ ] JPA
-- [ ] Audited JPA Envers
-- [ ] Validator
-
-- [ ] Tratamento de Exceptions
+- [ ] Core
+  - [X] Lombok
+  - [X] Pagination
+  - [X] VO
+  - [ ] Validator
+  - [ ] Tratamento de Exceptions
 
 - [ ] Heroku
 - [ ] New Relic
 
 ---
+
+## 0. Spring Initializr:
+
+- ### O que é:
+    - **Spring Initializr** fornece uma interface web bem simples para o usuário. Podendo gerar seu projeto a partir de
+      uma estrutura de configurações pré-moldadas. São configurações de versões do java/spring boot, grupo/nome do
+      projeto, série de lista de dependências e etc.
+
+- ### Inicializando projeto com Spring initializr:
+  <details>
+  <summary>Inicializando nosso projeto com Spring initializr:</summary>
+
+    - Inicializaremos o projeto através do [spring initializr](http://start.spring.io) utilizando os parâmetros
+      abaixo:
+
+        - **Project**: Gradle Project;
+            - **Language**: Java;
+            - **Spring Boot**: 2.6.5;
+            - **Project Metadata**:
+                - **Group**: br.com.simple
+                - **Artifact**: crud
+                - **Name**: crud
+                - **Description**: Simple CRUD API
+                - **Package name**: br.com.simple.crud
+                - **Packaging**: jar
+                - **Java**: 11
+            - **Dependencies**: Spring Web, Spring Data JPA, PostgreSQL Driver, Lombok
+
+  </details>
+
+- ### Spring Quickstart:
+  > [Spring Quickstart](https://spring.io/quickstart)
+
+---
+
 
 ## 1. Docker:
 
@@ -255,10 +299,76 @@
 - ### Mais Informações:
   > [Docker in 100 Seconds](https://www.youtube.com/watch?v=Gjnup-PuquQ)
 
+-----
+
+## 2. PostgreSQL:
+
+### Banco de Dados Relacional:
+
+> Um banco de dados relacional é um banco de dados que modela os dados de uma forma que eles sejam percebidos pelo
+> usuário como tabelas, ou mais formalmente relações..
+
+- ### O que é:
+    - **PostgreSQL**, trata-se de um SGBD relacional, orientado a objetos, no qual objetos definidos pelo usuário e a
+      abordagem de tabela são combinados para criar estruturas mais complexas de dados. Além disso, o PostgreSQL tem
+      muitas semelhanças com o MySQL. Suporta nativamente um grande número de tipos de dados padrão, como JSON, XML,
+      etc.
+        - É um dos poucos bancos de dados relacionais que **oferece forte suporte para a funcionalidade NoSQL**.
+        - Permite que os usuários definam seus **próprios tipos de dados**.
+        - A **escalabilidade vertical** é um recurso do PostgreSQL. Como quase todas as soluções de software
+          personalizadas tendem a crescer, resultando na expansão do banco de dados, essa opção oferece suporte ao
+          crescimento e ao desenvolvimento dos negócios muito bem.
+        - Oferece **suporte a ferramentas adicionais**, tanto gratuitas quanto comerciais.
+
+- ### Configurando e conectando PostgreSQL no projeto:
+  <details>
+  <summary>Configurando e conectando PostgreSQL no projeto:</summary>
+
+  #### 1 - Conectando banco:
+
+    - **Após configurado nosso container seguindo os passo do item anterior, iremos conectar o banco à nossa
+      aplicação**:
+
+        - Primeiramente, iremos adicionar as seguinte linhas de dependência em nosso
+          arquivo [build.gradle](./build.gradle)
+
+          ```
+              dependencies {
+                  // PostgreSQL
+                  runtimeOnly 'org.postgresql:postgresql'
+              }
+          ```
+        - Em seguida, em [application.yml](./src/main/resources/application.yml), iremos colocar as propriedades com
+          dados
+          de conexão:
+          ```yaml
+          spring:
+          datasource:
+            url: jdbc:postgresql://localhost:5432/crudDB
+            username: admin
+            password: admin
+            driver-class-name: org.postgresql.Driver
+            hikari:
+              connection-test-query: select 1
+          ```
+        - Desta forma, com o container inicializado, ao rodar a aplicação, teremos nossa conexão entre aplicação e banco
+          de dados.
+  -----
+
+  </details>
+
+- ### Mais Informações:
+  > [Curso de PostgreSQL - Bóson Treinamentos](https://www.youtube.com/playlist?list=PLucm8g_ezqNoAkYKXN_zWupyH6hQCAwxY)
+
 ---
 
-### Tecnologias a serem estudadas em projetos futuros:
 
+
+## Tecnologias a serem estudadas em projetos futuros:
+
+- [ ] Json Patch
+- [ ] Builder
+- [ ] Spring Auth
 - [ ] Apache Kafka
 - [ ] Hystrix
 - [ ] Spark
@@ -266,14 +376,15 @@
     - [ ] S3
     - [ ] EC2
 - [ ] Kubernetes
-- [ ] Lombok
 - [ ] Sleuth
 - [ ] Zipkin UI
 - [ ] Spring Cloud Config (Remote Configuration)
 - [ ] Spring Cloud Bus
 - [ ] Migrations (FlyWay vs Liquibase)
+- [ ] SDKMAN (Windows & Linux)
 
 ---
+
 
 ## Como Contribuir?
 
