@@ -13,6 +13,7 @@ sourceCompatibility = '11'
 repositories {
     mavenCentral()
 }
+
 ext {
     set('swaggerVersion', "2.9.2")
     set('springBootVersion', "2.5.10")
@@ -23,27 +24,35 @@ ext {
 
 dependencies {
     // Spring Boot
-    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.data:spring-data-envers'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Swagger
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
     // PostgreSQL
-    //runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Tests
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
     testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Apache Commons
     implementation "commons-io:commons-io:${apacheCommonsVersion}"
     implementation "commons-lang:commons-lang:${apacheCommonsLangVersions}"
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
 }
 
 sonarqube {
