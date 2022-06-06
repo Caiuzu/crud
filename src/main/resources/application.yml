@@ -20,6 +20,8 @@ spring:
             non_contextual_creation: true
 server:
   port: 8080
+  error:
+    include-message: always
 management:
   endpoint:
     health:

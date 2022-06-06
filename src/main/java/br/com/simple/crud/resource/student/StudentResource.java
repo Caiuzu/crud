@@ -1,7 +1,6 @@
 package br.com.simple.crud.resource.student;
 
 import br.com.simple.crud.domain.entity.Student;
-import br.com.simple.crud.domain.vo.StudentRequestVO;
 import br.com.simple.crud.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/student")
@@ -27,7 +24,7 @@ public class StudentResource {
     private final StudentService studentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Student>> getById(@PathVariable("id") final Long id) {
+    public ResponseEntity<Student> getById(@PathVariable("id") final Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(studentService.findById(id));
     }
 
@@ -40,8 +37,7 @@ public class StudentResource {
     }
 
     @PostMapping
-    public ResponseEntity<Student> create(@RequestBody StudentRequestVO studentRequestVO) {
-        final Student student = new Student(studentRequestVO.getName(), studentRequestVO.getLastName(), studentRequestVO.getAge());
+    public ResponseEntity<Student> create(@RequestBody Student student) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.save(student));
     }
 
