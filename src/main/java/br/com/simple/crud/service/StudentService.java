@@ -34,7 +34,6 @@ public class StudentService {
             return studentRepository.save(student);
         }
         throw new StudentValidationException(violations.toString());
-
     }
 
     public Page<Student> findAll(final Integer page, final Integer size, final Boolean active) {
@@ -50,10 +49,12 @@ public class StudentService {
     }
 
     public Student update(final Student student) {
-        if ((student.getId() != null) && studentRepository.existsById(student.getId())) {
+        final List<String> violations = getConstraintViolations(student);
+
+        if ((student.getId() != null) && studentRepository.existsById(student.getId()) && violations.isEmpty()) {
             return studentRepository.save(student);
         }
-        return null;
+        throw new StudentValidationException(violations.toString());
     }
 
     public boolean existsById(Long id) {
