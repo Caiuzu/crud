@@ -39,8 +39,12 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Make gradlew executable # Sometimes the gradlew file is not executable
         run: chmod +x ./gradlew
-      - name: Build and analyze
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        run: ./gradlew clean build #test sonarqube --info
+      - name: Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew clean build test sonarqube --info
+        run: ./gradlew test sonarqube --info
