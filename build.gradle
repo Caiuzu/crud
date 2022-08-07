@@ -82,7 +82,8 @@ tasks.jacocoTestReport {
         getClassDirectories().from(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: ["src/main/java/br/com/hello/world/HelloWorldApplication.java," +
-                                      "src/main/java/br/com/hello/world/config/**"]
+                                      "src/main/java/br/com/simple/crud/config/**" +
+                                      "src/main/java/br/com/simple/crud/exception/**"]
             )
         }))
     }
