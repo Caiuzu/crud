@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:crudDB;Mode=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    username: test
+    password: test
+    driver-class-name: org.h2.Driver
+    hikari:
+      connection-test-query: select 1
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
