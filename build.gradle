@@ -64,7 +64,10 @@ sonarqube {
         property 'sonar.exclusions',
                 "src/main/java/br/com/simple/crud/CrudApplication.java," +
                         "src/main/java/br/com/simple/crud/config/**, " +
-                        "src/main/java/br/com/simple/crud/exception/**"
+                        "src/main/java/br/com/simple/crud/exception/**, " +
+                        "src/main/java/br/com/simple/crud/domain/vo/**, " +
+                        "src/main/java/br/com/simple/crud/domain/entity/**"
+
     }
 }
 
@@ -85,7 +88,9 @@ tasks.jacocoTestReport {
             fileTree(dir: it,
                     exclude: ["src/main/java/br/com/simple/crud/CrudApplication.java, " +
                                       "src/main/java/br/com/simple/crud/config/**, " +
-                                      "src/main/java/br/com/simple/crud/exception/**"]
+                                      "src/main/java/br/com/simple/crud/exception/**, " +
+                                      "src/main/java/br/com/simple/crud/domain/vo/**, " +
+                                      "src/main/java/br/com/simple/crud/domain/entity/**"]
             )
         }))
     }
