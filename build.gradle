@@ -65,7 +65,7 @@ sonarqube {
                 "src/main/java/br/com/simple/crud/CrudApplication.java," +
                         "src/main/java/br/com/simple/crud/config/**, " +
                         "src/main/java/br/com/simple/crud/exception/**, " +
-                        "src/main/java/br/com/simple/crud/domain/vo/**, " +
+                        "src/main/java/br/com/simple/crud/domain/dto/**, " +
                         "src/main/java/br/com/simple/crud/domain/entity/**"
 
     }
@@ -89,7 +89,7 @@ tasks.jacocoTestReport {
                     exclude: ["src/main/java/br/com/simple/crud/CrudApplication.java, " +
                                       "src/main/java/br/com/simple/crud/config/**, " +
                                       "src/main/java/br/com/simple/crud/exception/**, " +
-                                      "src/main/java/br/com/simple/crud/domain/vo/**, " +
+                                      "src/main/java/br/com/simple/crud/domain/dto/**, " +
                                       "src/main/java/br/com/simple/crud/domain/entity/**"]
             )
         }))

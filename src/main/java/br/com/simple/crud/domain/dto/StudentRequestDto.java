@@ -1,4 +1,4 @@
-package br.com.simple.crud.domain.vo;
+package br.com.simple.crud.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentRequestVO implements Serializable {
+public class StudentRequestDto implements Serializable {
     private String name;
     private String lastName;
     private Integer age;
