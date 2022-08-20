@@ -8,22 +8,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+@Entity
 @Getter
 @Setter
+@Audited
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
-@Entity
+@RequiredArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Student {
     @Id
     @Column(nullable = false)
