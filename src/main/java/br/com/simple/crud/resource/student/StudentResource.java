@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityNotFoundException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/student")
@@ -24,8 +26,12 @@ public class StudentResource {
     private final StudentService studentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getById(@PathVariable("id") final Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(studentService.findById(id));
+    public ResponseEntity<?> getById(@PathVariable("id") final Long id) {
+        try {
+            return ResponseEntity.ok(studentService.getById(id));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping

@@ -1,7 +1,6 @@
 package br.com.simple.crud.service;
 
 import br.com.simple.crud.domain.entity.Student;
-import br.com.simple.crud.exception.StudentNotFoundException;
 import br.com.simple.crud.exception.StudentValidationException;
 import br.com.simple.crud.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +39,8 @@ public class StudentService {
         return studentRepository.findAll(active ? PageRequest.of(page, size) : Pageable.unpaged());
     }
 
-    public Student findById(final Long id) {
-        return studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
+    public Student getById(final Long id) {
+        return studentRepository.getById(id);
     }
 
     public void delete(final Long id) {
