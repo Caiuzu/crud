@@ -2,6 +2,7 @@ package br.com.simple.crud.domain.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 @Entity
 @Getter
 @Setter
+@Builder
 @Audited
 @ToString
 @AllArgsConstructor
@@ -33,7 +37,7 @@ public class Student {
     @Id
     @Column(nullable = false)
     @Setter(AccessLevel.NONE)
-    @GeneratedValue
+    @GeneratedValue(strategy = SEQUENCE, generator = "STUDENT_SEQ")
     @EqualsAndHashCode.Include
     private Long id;
 
