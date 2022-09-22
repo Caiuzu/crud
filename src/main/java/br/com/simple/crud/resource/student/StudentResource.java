@@ -36,10 +36,9 @@ public class StudentResource {
 
     @GetMapping
     public ResponseEntity<Page<Student>> getAll(
-            @RequestParam(required = false, defaultValue = "0") final Integer page,
-            @RequestParam(required = false, defaultValue = "10") final Integer size,
-            @RequestParam(required = false, defaultValue = "true") final Boolean activePagination) {
-        return ResponseEntity.ok(studentService.findAll(page, size, activePagination));
+            @RequestParam(required = false, defaultValue = "true") final Boolean activePagination,
+            final Pageable pageable) {
+        return ResponseEntity.ok(studentService.findAll(pageable, activePagination));
     }
 
     @PostMapping

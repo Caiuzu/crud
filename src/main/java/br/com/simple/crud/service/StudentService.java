@@ -35,8 +35,8 @@ public class StudentService {
         throw new StudentValidationException(violations.toString());
     }
 
-    public Page<Student> findAll(final Integer page, final Integer size, final Boolean active) {
-        return studentRepository.findAll(active ? PageRequest.of(page, size) : Pageable.unpaged());
+    public Page<Student> findAll(final Pageable pageable, final Boolean active) {
+        return studentRepository.findAll(active ? pageable : Pageable.unpaged());
     }
 
     public Student getById(final Long id) {
