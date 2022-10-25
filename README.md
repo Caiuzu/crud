@@ -35,12 +35,12 @@
 <!-- Indice-->  
 <p align="center">  
  <a href="#resumo">Resumo</a> •
- <a href="#spring-initializr">Spring Initializr</a> •  
- <a href="#docker">Docker</a> •  
- <a href="#postgresql">PostgreSQL</a> •  
- <a href="#orm">ORM</a> •  
- <a href="#lombok">Lombok</a> •  
- <a href="#testes">Testes</a> •  
+ <a href="#0-spring-initializr">Spring Initializr</a> •  
+ <a href="#1-docker">Docker</a> •  
+ <a href="#2-postgresql">PostgreSQL</a> •  
+ <a href="#3-orm">ORM</a> •  
+ <a href="#4-lombok">Lombok</a> •  
+ <a href="#5-testes">Testes</a> •  
  <a href="#como-contribuir">Como Contribuir?</a>  
 </p>  
 
@@ -408,7 +408,11 @@
 
 ---
 
-
+```
+    public Student getById(final Long id) {
+        return studentRepository.getById(id); //.orElseThrow(StudentNotFoundException::new); Se necessário criar uma exception personalizada, utilizar o findById(), caso contrário utilizar o getById() que já retorna uma Exception genérica para EntityNotFound
+    }
+```
 
 ## Tecnologias a serem estudadas em projetos futuros:
 
