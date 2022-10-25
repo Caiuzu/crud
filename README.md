@@ -2,13 +2,48 @@
 
 ###### By: [@caiuzu](https://github.com/Caiuzu/)
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Caiuzu/crud)
-![ViewCount](https://views.whatilearened.today/views/github/Caiuzu/crud.svg)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=bugs)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=code_smells)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=ncloc)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=coverage)](https://sonarcloud.io/dashboard?id=Caiuzu_crud)
-[![Java CI with Gradle](https://github.com/Caiuzu/crud/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/Caiuzu/crud/actions/workflows/gradle.yml)
+<!-- Badges -->
+<p align="center">
+   <a href="https://www.linkedin.com/">
+      <img alt="Caio Souza" src="https://img.shields.io/badge/-Caio Souza-black?style=flat&logo=Linkedin&logoColor=white" />
+   </a>
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/Caiuzu/crud"/>
+  <img alt="Repository size" src="https://views.whatilearened.today/views/github/Caiuzu/crud.svg"/>
+
+   <a href="https://sonarcloud.io/dashboard?id=Caiuzu_crud">
+      <img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=bugs" />
+   </a>
+   <a href="https://sonarcloud.io/dashboard?id=Caiuzu_crud">
+      <img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=bugs" />
+   </a>
+   <a href="https://sonarcloud.io/dashboard?id=Caiuzu_crud">
+      <img alt="Code Smells" src="https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=code_smells" />
+   </a>
+   <a href="https://sonarcloud.io/dashboard?id=Caiuzu_crud">
+      <img alt="Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=ncloc" />
+   </a>
+   <a href="https://sonarcloud.io/dashboard?id=Caiuzu_crud">
+      <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=Caiuzu_crud&metric=coverage" />
+   </a>
+   <a href="https://github.com/Caiuzu/crud/actions/workflows/gradle.yml">
+      <img alt="Java CI with Gradle" src="https://github.com/Caiuzu/crud/actions/workflows/gradle.yml/badge.svg?branch=master" />
+   </a>
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-black"/>
+</p>
+
+
+<!-- Indice-->  
+<p align="center">  
+ <a href="#resumo">Resumo</a> •
+ <a href="#spring-initializr">Spring Initializr</a> •  
+ <a href="#docker">Docker</a> •  
+ <a href="#postgresql">PostgreSQL</a> •  
+ <a href="#orm">ORM</a> •  
+ <a href="#lombok">Lombok</a> •  
+ <a href="#testes">Testes</a> •  
+ <a href="#como-contribuir">Como Contribuir?</a>  
+</p>  
+
 ---
 
 ### Resumo:
@@ -17,46 +52,58 @@
 > utilizadas no dia-a-dia.
 > Através de um CRUD simples, implementaremos os itens descritos abaixo.
 
-## Tecnologias/Ferramentas Utilizadas no Projeto:
 
-##### Tecnologias utilizadas e explicadas previamente no projeto [hello-world](https://github.com/Caiuzu/hello-world):
 
-- [x] Spring Initializr
-- [x] Spring Boot
-- [X] Gradle
-- [X] Actuator
-- [X] Springfox Swagger
-- [X] JUnit 5
-- [X] Cucumber
-- [X] SonarCloud
-- [X] CI/CD (GitHub Actions)
-- [X] Commit Semântico
-- [X] Discord Webhook
+### Tecnologias/Ferramentas Utilizadas no Projeto:
 
-##### Novas Tecnologias:
+<details>
+<summary>Tecnologias utilizadas e explicadas previamente no projeto <a href="https://github.com/Caiuzu/hello-world">hello-world</a>:</summary> 
 
+  - [x] Spring Initializr
+  - [x] Spring Boot
+  - [X] Gradle
+  - [X] Actuator
+  - [X] Springfox Swagger
+  - [X] JUnit 5
+  - [X] Cucumber
+  - [X] SonarCloud
+  - [X] CI/CD (GitHub Actions)
+  - [X] Commit Semântico
+  - [X] Discord Webhook
+
+</details>
+
+
+<details>
+<summary>Novas Tecnologias utilizadas neste projeto:</summary> 
+
+- [X] JUnit 5 (Complementando)
+    - Considerar a utilização do Teste Unitário para tudo, menos entidades e controller( nos controllers utilizar teste
+      de integração com cucumber)
 - [X] Docker
     - [X] Portainer.io
     - [X] PostgreSQL
 
 - [ ] ORM
-  - [X] Hibernate
-  - [X] JPA
-    - [ ] Audited JPA Envers 
+    - [X] Hibernate
+    - [X] JPA
+        - [X] Audited JPA Envers
 
 - [ ] Testes
-  - [ ] Mockito
-  - [ ] Factory
+    - [ ] Mockito
+    - [ ] Factory
 
 - [ ] Core
-  - [X] Lombok
-  - [X] Pagination
-  - [X] VO
-  - [ ] Validator
-  - [ ] Tratamento de Exceptions
+    - [X] Lombok
+    - [X] Pagination
+    - [X] VO
+    - [ ] Validator
+    - [ ] Tratamento de Exceptions
 
 - [ ] Heroku
 - [ ] New Relic
+
+</details>
 
 ---
 
@@ -65,7 +112,7 @@
 - ### O que é:
     - **Spring Initializr** fornece uma interface web bem simples para o usuário. Podendo gerar seu projeto a partir de
       uma estrutura de configurações pré-moldadas. São configurações de versões do java/spring boot, grupo/nome do
-      projeto, série de lista de dependências e etc.
+      projeto, série de lista de dependências, etc.
 
 - ### Inicializando projeto com Spring initializr:
   <details>
@@ -93,7 +140,6 @@
   > [Spring Quickstart](https://spring.io/quickstart)
 
 ---
-
 
 ## 1. Docker:
 
@@ -309,13 +355,13 @@
 > usuário como tabelas, ou mais formalmente relações..
 
 - ### O que é:
-    - **PostgreSQL**, trata-se de um SGBD relacional, orientado a objetos, no qual objetos definidos pelo usuário e a
+    - **PostgreSQL**, trata-se de um SGBD relacional, orientado a objetos, em que objetos definidos pelo usuário e a
       abordagem de tabela são combinados para criar estruturas mais complexas de dados. Além disso, o PostgreSQL tem
-      muitas semelhanças com o MySQL. Suporta nativamente um grande número de tipos de dados padrão, como JSON, XML,
-      etc.
+      muitas semelhanças com o MySQL. Suporta nativamente um grande número de categorias de dados padrão, como JSON,
+      XML, etc.
         - É um dos poucos bancos de dados relacionais que **oferece forte suporte para a funcionalidade NoSQL**.
         - Permite que os usuários definam seus **próprios tipos de dados**.
-        - A **escalabilidade vertical** é um recurso do PostgreSQL. Como quase todas as soluções de software
+        - A **escalabilidade vertical** é um recurso do PostgreSQL. Como quase todas as soluções de ‘software’
           personalizadas tendem a crescer, resultando na expansão do banco de dados, essa opção oferece suporte ao
           crescimento e ao desenvolvimento dos negócios muito bem.
         - Oferece **suporte a ferramentas adicionais**, tanto gratuitas quanto comerciais.
@@ -326,10 +372,10 @@
 
   #### 1 - Conectando banco:
 
-    - **Após configurado nosso container seguindo os passo do item anterior, iremos conectar o banco à nossa
+    - **Após configurado nosso container seguindo os passos do item anterior, iremos conectar o banco à nossa
       aplicação**:
 
-        - Primeiramente, iremos adicionar as seguinte linhas de dependência em nosso
+        - Primeiramente, iremos adicionar as seguintes linhas de dependência em nosso
           arquivo [build.gradle](./build.gradle)
 
           ```
@@ -384,7 +430,6 @@
 - [ ] SDKMAN (Windows & Linux)
 
 ---
-
 
 ## Como Contribuir?
 
