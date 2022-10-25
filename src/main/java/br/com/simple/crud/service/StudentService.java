@@ -1,19 +1,19 @@
 package br.com.simple.crud.service;
 
+import br.com.simple.crud.domain.dto.StudentRequestDto;
+import br.com.simple.crud.domain.dto.StudentResponseDto;
 import br.com.simple.crud.domain.entity.Student;
 import br.com.simple.crud.exception.StudentValidationException;
 import br.com.simple.crud.repository.StudentRepository;
+import br.com.simple.crud.service.builder.StudentBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,14 +23,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = factory.getValidator();
+    private final StudentBuilder studentBuilder;
+    private final Validator validator;
 
-    public Student save(final Student student) {
+    public StudentResponseDto save(final StudentRequestDto studentRequestDto) {
+        final Student student = studentBuilder.toStudent(studentRequestDto);
         final List<String> violations = getConstraintViolations(student);
 
         if ((student.getId() == null) && violations.isEmpty()) {
-            return studentRepository.save(student);
+            return studentBuilder.toStudentResponseDto(studentRepository.save(student));
         }
         throw new StudentValidationException(violations.toString());
     }
@@ -39,8 +40,8 @@ public class StudentService {
         return studentRepository.findAll(active ? pageable : Pageable.unpaged());
     }
 
-    public Student getById(final Long id) {
-        return studentRepository.getById(id);
+    public StudentResponseDto getById(final Long id) {
+        return studentBuilder.toStudentResponseDto(studentRepository.getById(id));
     }
 
     public void delete(final Long id) {

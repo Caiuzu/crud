@@ -9,9 +9,10 @@ import java.io.Serializable;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class StudentRequestDto implements Serializable {
+@AllArgsConstructor
+public class StudentResponseDto implements Serializable {
+    private Long id;
     private String name;
     private String lastName;
     private Integer age;

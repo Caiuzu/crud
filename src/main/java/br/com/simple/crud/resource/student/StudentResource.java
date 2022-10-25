@@ -1,5 +1,7 @@
 package br.com.simple.crud.resource.student;
 
+import br.com.simple.crud.domain.dto.StudentRequestDto;
+import br.com.simple.crud.domain.dto.StudentResponseDto;
 import br.com.simple.crud.domain.entity.Student;
 import br.com.simple.crud.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +44,8 @@ public class StudentResource {
     }
 
     @PostMapping
-    public ResponseEntity<Student> create(@RequestBody Student student) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.save(student));
+    public ResponseEntity<StudentResponseDto> create(@RequestBody StudentRequestDto studentRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.save(studentRequestDto));
     }
 
     @DeleteMapping(value = "/{id}")
