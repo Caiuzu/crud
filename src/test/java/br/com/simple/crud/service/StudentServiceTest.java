@@ -108,4 +108,14 @@ class StudentServiceTest {
         verify(validatorMock, times(1)).validate(any());
     }
 
+    @Test
+    void deleteStudentWithSuccess() {
+        final Student student = studentFactory.createStudent();
+
+        studentService.delete(student.getId());
+
+        assertNotNull(student);
+        verify(studentRepositoryMock).deleteById(student.getId());
+    }
+
 }
