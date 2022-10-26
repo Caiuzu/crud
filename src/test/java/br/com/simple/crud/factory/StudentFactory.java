@@ -9,13 +9,17 @@ import java.util.List;
 
 public class StudentFactory {
 
-    private static final Long ID = 1L;
-    private static final String NAME = "RAGNAR";
-    private static final String LAST_NAME = "L";
-    private static final Integer AGE = 18;
+    public static final Long ID = 1L;
+    public static final String NAME = "RAGNAR";
+    public static final String LAST_NAME = "L";
+    public static final Integer AGE = 18;
 
     public Student createStudent() {
         return new Student(ID, NAME, LAST_NAME, AGE);
+    }
+
+    public Student createStudentWithoutId() {
+        return new Student(NAME, LAST_NAME, AGE);
     }
 
     public Page<Student> createStudentsPage() {
