@@ -3,6 +3,7 @@ package br.com.simple.crud.service;
 import br.com.simple.crud.domain.dto.StudentRequestDto;
 import br.com.simple.crud.domain.dto.StudentResponseDto;
 import br.com.simple.crud.domain.entity.Student;
+import br.com.simple.crud.exception.StudentValidationException;
 import br.com.simple.crud.factory.StudentFactory;
 import br.com.simple.crud.factory.StudentRequestDtoFactory;
 import br.com.simple.crud.factory.StudentResponseDtoFactory;
@@ -147,5 +148,12 @@ class StudentServiceTest {
         verify(studentRepositoryMock, times(1)).existsById(any());
         verify(studentRepositoryMock, times(1)).save(student);
         verify(studentRepositoryMock).save(student);
+    }
+
+    @Test
+    void updateStudentWithError() {
+        final Student student = studentFactory.createStudent();
+        when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
+        assertThrows(StudentValidationException.class, () -> studentService.update(student));
     }
 }
