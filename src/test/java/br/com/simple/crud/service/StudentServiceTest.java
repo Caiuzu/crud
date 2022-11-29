@@ -18,6 +18,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import java.util.Collections;
 
+import static br.com.simple.crud.factory.StudentFactory.NEW_AGE;
+import static br.com.simple.crud.factory.StudentFactory.NEW_LAST_NAME;
+import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -123,5 +126,26 @@ class StudentServiceTest {
     void deleteStudentWithError() {
         doThrow(IllegalArgumentException.class).when(studentRepositoryMock).deleteById(any());
         assertThrows(IllegalArgumentException.class, () -> studentService.delete(any()));
+    }
+
+    @Test
+    void updateStudentWithSuccess() {
+        final Student student = studentFactory.createStudent(NEW_NAME, NEW_LAST_NAME, NEW_AGE);
+        final Student expectedUpdatedStudent = studentFactory.createUpdatedStudent();
+
+        when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.TRUE);
+        when(studentRepositoryMock.save(any())).thenReturn(student);
+
+        final Student updatedStudent = studentService.update(student);
+
+        assertNotNull(updatedStudent);
+        assertEquals(expectedUpdatedStudent.getId(), updatedStudent.getId());
+        assertEquals(expectedUpdatedStudent.getName(), updatedStudent.getName());
+        assertEquals(expectedUpdatedStudent.getLastName(), updatedStudent.getLastName());
+        assertEquals(expectedUpdatedStudent.getAge(), updatedStudent.getAge());
+
+        verify(studentRepositoryMock, times(1)).existsById(any());
+        verify(studentRepositoryMock, times(1)).save(student);
+        verify(studentRepositoryMock).save(student);
     }
 }
