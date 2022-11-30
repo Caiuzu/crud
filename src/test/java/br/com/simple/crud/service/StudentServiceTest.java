@@ -170,4 +170,9 @@ class StudentServiceTest {
         verify(studentRepositoryMock, times(1)).existsById(anyLong());
     }
 
+    @Test
+    void existsByIdWithError() {
+        doThrow(IllegalArgumentException.class).when(studentRepositoryMock).existsById(anyLong());
+        assertThrows(IllegalArgumentException.class, () -> studentService.existsById(anyLong()));
+    }
 }
