@@ -22,6 +22,7 @@ import java.util.Collections;
 import static br.com.simple.crud.factory.StudentFactory.NEW_AGE;
 import static br.com.simple.crud.factory.StudentFactory.NEW_LAST_NAME;
 import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
+import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -134,7 +135,7 @@ class StudentServiceTest {
         final Student student = studentFactory.createStudent(NEW_NAME, NEW_LAST_NAME, NEW_AGE);
         final Student expectedUpdatedStudent = studentFactory.createUpdatedStudent();
 
-        when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.TRUE);
+        when(studentRepositoryMock.existsById(any())).thenReturn(TRUE);
         when(studentRepositoryMock.save(any())).thenReturn(student);
 
         final Student updatedStudent = studentService.update(student);
@@ -155,5 +156,18 @@ class StudentServiceTest {
         final Student student = studentFactory.createStudent();
         when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
         assertThrows(StudentValidationException.class, () -> studentService.update(student));
+        verify(studentRepositoryMock, times(1)).existsById(anyLong());
     }
+
+    @Test
+    void existsByIdWithSuccess() {
+        final Student student = studentFactory.createStudent();
+        when(studentRepositoryMock.existsById(anyLong())).thenReturn(TRUE);
+
+        final boolean existsById = studentService.existsById(student.getId());
+
+        assertEquals(TRUE, existsById);
+        verify(studentRepositoryMock, times(1)).existsById(anyLong());
+    }
+
 }
