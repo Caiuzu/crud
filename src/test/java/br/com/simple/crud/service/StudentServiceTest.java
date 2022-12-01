@@ -52,6 +52,7 @@ class StudentServiceTest {
     Validator validator;
 
     private static final Long ONE = 1L;
+    private static final Long TWO = 2L;
     private static final Integer PAGE = 1;
     private static final Integer SIZE = 3;
     private static final Boolean ACTIVE_TRUE = true;
@@ -132,8 +133,10 @@ class StudentServiceTest {
         final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
 
-        assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
+        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
 
+        assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
+        assertTrue(violations.isEmpty());
         verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
     }
 
@@ -147,6 +150,7 @@ class StudentServiceTest {
 
         assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
         assertFalse(violations.isEmpty());
+        assertEquals(TWO, violations.size());
         verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
     }
 
