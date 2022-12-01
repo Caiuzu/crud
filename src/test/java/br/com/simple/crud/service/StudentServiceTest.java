@@ -115,6 +115,16 @@ class StudentServiceTest {
     }
 
     @Test
+    void saveStudentWithErrorOnValidate() {
+        final Student student = studentFactory.createStudentWithEmptyNameAndLastName();
+        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudentWithEmptyNameLastName();
+        when(studentBuilderMock.toStudent(any())).thenReturn(student);
+
+        assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
+        verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
+    }
+
+    @Test
     void deleteStudentWithSuccess() {
         final Student student = studentFactory.createStudent();
 

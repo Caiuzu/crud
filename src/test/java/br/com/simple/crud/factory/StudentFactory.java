@@ -1,6 +1,7 @@
 package br.com.simple.crud.factory;
 
 import br.com.simple.crud.domain.entity.Student;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -31,6 +32,10 @@ public class StudentFactory {
 
     public Student createStudentWithoutId() {
         return new Student(NAME, LAST_NAME, AGE);
+    }
+
+    public Student createStudentWithEmptyNameAndLastName() {
+        return new Student(ID, StringUtils.EMPTY, StringUtils.EMPTY, AGE);
     }
 
     public Page<Student> createStudentsPage() {
