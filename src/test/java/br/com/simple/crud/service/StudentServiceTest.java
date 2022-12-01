@@ -28,6 +28,7 @@ import static br.com.simple.crud.factory.StudentFactory.NEW_LAST_NAME;
 import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
 import static java.lang.Boolean.TRUE;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,6 +62,8 @@ class StudentServiceTest {
         studentBuilderMock = mock(StudentBuilder.class);
         validatorMock = mock(Validator.class);
         studentService = new StudentService(studentRepositoryMock, studentBuilderMock, validatorMock);
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Test
@@ -106,9 +109,12 @@ class StudentServiceTest {
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
         when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
 
+        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
+
         final StudentResponseDto savedStudent = studentService.save(studentRequestDto);
 
         assertNotNull(savedStudent);
+        assertTrue(violations.isEmpty());
         assertEquals(ONE, savedStudent.getId());
         assertEquals(student.getName(), savedStudent.getName());
         assertEquals(student.getLastName(), savedStudent.getLastName());
@@ -136,9 +142,6 @@ class StudentServiceTest {
         final Student student = studentFactory.createStudentWithEmptyNameAndLastName();
         final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudentWithEmptyNameLastName();
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
-
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
 
         Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
 
