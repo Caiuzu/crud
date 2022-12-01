@@ -16,13 +16,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Collections;
+import java.util.Set;
 
 import static br.com.simple.crud.factory.StudentFactory.NEW_AGE;
 import static br.com.simple.crud.factory.StudentFactory.NEW_LAST_NAME;
 import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
 import static java.lang.Boolean.TRUE;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,6 +48,7 @@ class StudentServiceTest {
     StudentRepository studentRepositoryMock;
     StudentBuilder studentBuilderMock;
     Validator validatorMock;
+    Validator validator;
 
     private static final Long ONE = 1L;
     private static final Integer PAGE = 1;
@@ -116,22 +122,17 @@ class StudentServiceTest {
 
     @Test
     void saveStudentWithError() {
-        final Student student = studentFactory.createStudent();
-        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
-        when(studentBuilderMock.toStudent(any())).thenReturn(student);
-
-        assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
-
-        verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
-    }
-
-    @Test
-    void saveStudentWithErrorOnValidate() {
         final Student student = studentFactory.createStudentWithEmptyNameAndLastName();
         final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudentWithEmptyNameLastName();
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
 
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+
+        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
+
         assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
+        assertFalse(violations.isEmpty());
         verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
     }
 
