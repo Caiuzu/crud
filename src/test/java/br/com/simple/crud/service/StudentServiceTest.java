@@ -193,9 +193,20 @@ class StudentServiceTest {
 
     @Test
     void updateStudentWithError() {
-        final Student student = studentFactory.createStudent();
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
+
+        studentService = new StudentService(studentRepositoryMock, studentBuilderMock, validator);
+
+        final Student student = studentFactory.createStudentWithoutIdNameAndLastName();
+
         when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
+
         assertThrows(StudentValidationException.class, () -> studentService.update(student));
+        Set<ConstraintViolation<Student>> violations = validator.validate(student);
+
+        assertNotNull(violations);
+        assertEquals(TWO, violations.size());
         verify(studentRepositoryMock, times(1)).existsById(anyLong());
     }
 
