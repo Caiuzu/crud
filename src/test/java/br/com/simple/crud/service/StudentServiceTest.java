@@ -9,6 +9,7 @@ import br.com.simple.crud.factory.StudentRequestDtoFactory;
 import br.com.simple.crud.factory.StudentResponseDtoFactory;
 import br.com.simple.crud.repository.StudentRepository;
 import br.com.simple.crud.service.builder.StudentBuilder;
+import br.com.simple.crud.utils.ConstraintViolationMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -42,12 +43,11 @@ class StudentServiceTest {
     private final StudentFactory studentFactory = new StudentFactory();
     private final StudentRequestDtoFactory studentRequestDtoFactory = new StudentRequestDtoFactory();
     private final StudentResponseDtoFactory studentResponseDtoFactory = new StudentResponseDtoFactory();
-    private final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
-    StudentRepository studentRepositoryMock;
-    StudentBuilder studentBuilderMock;
-    Validator validatorMock;
-    Validator validator;
+    private StudentRepository studentRepositoryMock;
+    private StudentBuilder studentBuilderMock;
+    private Validator validatorMock;
 
+    private final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
     private static final Long ONE = 1L;
     private static final Long TWO = 2L;
     private static final Integer PAGE = 1;
@@ -105,12 +105,9 @@ class StudentServiceTest {
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
         when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
 
-        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
-
         final StudentResponseDto savedStudent = studentService.save(studentRequestDto);
 
         assertNotNull(savedStudent);
-        assertTrue(violations.isEmpty());
         assertEquals(ONE, savedStudent.getId());
         assertEquals(student.getName(), savedStudent.getName());
         assertEquals(student.getLastName(), savedStudent.getLastName());
@@ -125,28 +122,50 @@ class StudentServiceTest {
     @Test
     void saveStudentWithError() {
         final Student student = studentFactory.createStudent();
-        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
-
-        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
+        when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
 
         assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
-        assertTrue(violations.isEmpty());
+
         verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
+        verify(validatorMock, times(1)).validate(any());
+        verify(studentRepositoryMock, times(0)).save(student);
+        verify(studentBuilderMock, times(0)).toStudentResponseDto(student);
     }
 
     @Test
     void saveStudentWithErrorOnValidate() {
-        final Student student = studentFactory.createStudentWithEmptyNameAndLastName();
-        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudentWithEmptyNameLastName();
-        when(studentBuilderMock.toStudent(any())).thenReturn(student);
+        final Set<ConstraintViolation<Student>> constraintViolations = new HashSet<>();
+        constraintViolations.add(new ConstraintViolationMock());
+        final Student student = studentFactory.createStudent();
+        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
 
-        Set<ConstraintViolation<Student>> violations = this.validator.validate(student);
+        when(studentBuilderMock.toStudent(any())).thenReturn(student);
+        when(validatorMock.validate(any(Student.class))).thenReturn(constraintViolations);
 
         assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
-        assertFalse(violations.isEmpty());
-        assertEquals(TWO, violations.size());
+
         verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
+        verify(validatorMock, times(1)).validate(any());
+        verify(studentRepositoryMock, times(0)).save(student);
+        verify(studentBuilderMock, times(0)).toStudentResponseDto(student);
+    }
+
+    @Test
+    void saveStudentWithErrorOnValidateAndWithId() {
+        final Set<ConstraintViolation<Student>> constraintViolations = new HashSet<>();
+        constraintViolations.add(new ConstraintViolationMock());
+        final Student student = studentFactory.createStudent();
+        final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
+        when(studentBuilderMock.toStudent(any())).thenReturn(student);
+        when(validatorMock.validate(any(Student.class))).thenReturn(constraintViolations);
+
+        assertThrows(StudentValidationException.class, () -> studentService.save(studentRequestDto));
+
+        verify(studentBuilderMock, times(1)).toStudent(studentRequestDto);
+        verify(validatorMock, times(1)).validate(any());
+        verify(studentRepositoryMock, times(0)).save(student);
+        verify(studentBuilderMock, times(0)).toStudentResponseDto(student);
     }
 
     @Test
@@ -195,10 +214,6 @@ class StudentServiceTest {
         when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
 
         assertThrows(StudentValidationException.class, () -> studentService.update(student));
-        Set<ConstraintViolation<Student>> violations = validator.validate(student);
-
-        assertNotNull(violations);
-        assertEquals(TWO, violations.size());
         verify(studentRepositoryMock, times(1)).existsById(anyLong());
         verify(validatorMock, times(1)).validate(any());
     }
