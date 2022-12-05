@@ -51,7 +51,7 @@ public class StudentService {
     public Student update(final Student student) {
         final List<String> violations = getConstraintViolations(student);
 
-        if ((student.getId() != null) && studentRepository.existsById(student.getId()) && violations.isEmpty()) {
+        if (studentRepository.existsById(student.getId()) && violations.isEmpty()) {
             return studentRepository.save(student);
         }
         throw new StudentValidationException(violations.toString());
