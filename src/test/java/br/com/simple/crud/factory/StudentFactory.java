@@ -34,13 +34,6 @@ public class StudentFactory {
         return new Student(NAME, LAST_NAME, AGE);
     }
 
-    public Student createStudentWithEmptyNameAndLastName() {
-        return new Student(ID, StringUtils.EMPTY, StringUtils.EMPTY, AGE);
-    }
-    public Student createStudentWithoutIdNameAndLastName() {
-        return new Student(ID, StringUtils.EMPTY, StringUtils.EMPTY, AGE);
-    }
-
     public Page<Student> createStudentsPage() {
         final List<Student> students = new ArrayList<>();
 

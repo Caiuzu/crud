@@ -17,18 +17,15 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static br.com.simple.crud.factory.StudentFactory.NEW_AGE;
 import static br.com.simple.crud.factory.StudentFactory.NEW_LAST_NAME;
 import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
 import static java.lang.Boolean.TRUE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,8 +60,6 @@ class StudentServiceTest {
         studentBuilderMock = mock(StudentBuilder.class);
         validatorMock = mock(Validator.class);
         studentService = new StudentService(studentRepositoryMock, studentBuilderMock, validatorMock);
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
     }
 
     @Test
@@ -177,6 +172,7 @@ class StudentServiceTest {
 
         when(studentRepositoryMock.existsById(any())).thenReturn(TRUE);
         when(studentRepositoryMock.save(any())).thenReturn(student);
+        when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
 
         final Student updatedStudent = studentService.update(student);
 
@@ -188,18 +184,14 @@ class StudentServiceTest {
 
         verify(studentRepositoryMock, times(1)).existsById(any());
         verify(studentRepositoryMock, times(1)).save(student);
-        verify(studentRepositoryMock).save(student);
+        verify(validatorMock, times(1)).validate(any());
     }
 
     @Test
-    void updateStudentWithError() {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        Validator validator = validatorFactory.getValidator();
+    void updateStudentWithErrorOnExistById() {
+        final Student student = studentFactory.createStudent();
 
-        studentService = new StudentService(studentRepositoryMock, studentBuilderMock, validator);
-
-        final Student student = studentFactory.createStudentWithoutIdNameAndLastName();
-
+        when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
         when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
 
         assertThrows(StudentValidationException.class, () -> studentService.update(student));
@@ -208,6 +200,35 @@ class StudentServiceTest {
         assertNotNull(violations);
         assertEquals(TWO, violations.size());
         verify(studentRepositoryMock, times(1)).existsById(anyLong());
+        verify(validatorMock, times(1)).validate(any());
+    }
+
+    @Test
+    void updateStudentWithErrorOnValidation() {
+        final Set<ConstraintViolation<Student>> constraintViolations = new HashSet<>();
+        constraintViolations.add(new ConstraintViolationMock());
+        final Student student = studentFactory.createStudent();
+
+        when(validatorMock.validate(any(Student.class))).thenReturn(constraintViolations);
+        when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.TRUE);
+
+        assertThrows(StudentValidationException.class, () -> studentService.update(student));
+        verify(studentRepositoryMock, times(1)).existsById(anyLong());
+        verify(validatorMock, times(1)).validate(any());
+    }
+
+    @Test
+    void updateStudentWithErrorOnValidationAndWithoutId() {
+        final Set<ConstraintViolation<Student>> constraintViolations = new HashSet<>();
+        constraintViolations.add(new ConstraintViolationMock());
+        final Student student = studentFactory.createStudent();
+
+        when(validatorMock.validate(any(Student.class))).thenReturn(constraintViolations);
+        when(studentRepositoryMock.existsById(any())).thenReturn(Boolean.FALSE);
+
+        assertThrows(StudentValidationException.class, () -> studentService.update(student));
+        verify(studentRepositoryMock, times(1)).existsById(anyLong());
+        verify(validatorMock, times(1)).validate(any());
     }
 
     @Test
