@@ -30,7 +30,7 @@ public class StudentService {
         final Student student = studentBuilder.toStudent(studentRequestDto);
         final List<String> violations = getConstraintViolations(student);
 
-        if ((student.getId() == null) && violations.isEmpty()) {
+        if (student.getId() == null && violations.isEmpty()) {
             return studentBuilder.toStudentResponseDto(studentRepository.save(student));
         }
         throw new StudentValidationException(violations.toString());
