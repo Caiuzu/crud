@@ -49,7 +49,6 @@ class StudentServiceTest {
 
     private final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
     private static final Long ONE = 1L;
-    private static final Long TWO = 2L;
     private static final Integer PAGE = 1;
     private static final Integer SIZE = 3;
     private static final Boolean ACTIVE_TRUE = true;
@@ -120,7 +119,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void saveStudentWithError() {
+    void saveStudentWithErrorNotNullId() {
         final Student student = studentFactory.createStudent();
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
         when(validatorMock.validate(any())).thenReturn(Collections.emptySet());
@@ -137,7 +136,7 @@ class StudentServiceTest {
     void saveStudentWithErrorOnValidate() {
         final Set<ConstraintViolation<Student>> constraintViolations = new HashSet<>();
         constraintViolations.add(new ConstraintViolationMock());
-        final Student student = studentFactory.createStudent();
+        final Student student = studentFactory.createStudentWithoutId();
         final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
 
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
@@ -157,6 +156,7 @@ class StudentServiceTest {
         constraintViolations.add(new ConstraintViolationMock());
         final Student student = studentFactory.createStudent();
         final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
+
         when(studentBuilderMock.toStudent(any())).thenReturn(student);
         when(validatorMock.validate(any(Student.class))).thenReturn(constraintViolations);
 
