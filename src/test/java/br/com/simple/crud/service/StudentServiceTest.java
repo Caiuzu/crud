@@ -29,6 +29,7 @@ import static br.com.simple.crud.factory.StudentFactory.NEW_NAME;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -52,6 +53,7 @@ class StudentServiceTest {
     private static final Integer PAGE = 1;
     private static final Integer SIZE = 3;
     private static final Boolean ACTIVE_TRUE = true;
+    private static final Boolean ACTIVE_FALSE = false;
 
     @BeforeEach
     public void init() {
@@ -92,6 +94,15 @@ class StudentServiceTest {
         final Page<Student> studentsPage = studentService.findAll(pageable, ACTIVE_TRUE);
 
         assertEquals(expectedStudentsPage, studentsPage);
+    }
+
+    @Test
+    void findAllStudentWithError() {
+        final Pageable pageable = PageRequest.of(PAGE, SIZE);
+
+        final Page<Student> studentsPage = studentService.findAll(pageable, ACTIVE_FALSE);
+
+        assertNull(studentsPage);
     }
 
     @Test
