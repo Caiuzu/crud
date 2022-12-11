@@ -19,7 +19,8 @@ ext {
     set('springBootVersion', "2.5.10")
     set('apacheCommonsVersion', "2.7")
     set('apacheCommonsLangVersions', "2.6")
-    set('cucumberVersion', "7.2.3")
+    set('cucumberVersion', "7.5.0")
+    set('h2Version', "1.4.200")
 }
 
 dependencies {
@@ -42,7 +43,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
     testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
     testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
-    testImplementation "com.h2database:h2:1.4.200"
+    testImplementation "com.h2database:h2:${h2Version}"
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
