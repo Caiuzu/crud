@@ -2,17 +2,17 @@ package br.com.simple.crud.cucumber.adapter;
 
 import br.com.simple.crud.domain.dto.StudentRequestDto;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.DataTableType;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class StudentDataTableAdapter {
     private static final String NAME = "name";
     private static final String LAST_NAME = "last_name";
     private static final String AGE = "age";
 
-    @DataTableType()
     public List<StudentRequestDto> createStudentList(final DataTable dataTable) {
         return dataTable
                 .asMaps(String.class, String.class)
