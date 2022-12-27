@@ -1,3 +1,16 @@
+import net.masterthought.cucumber.Configuration
+import net.masterthought.cucumber.ReportBuilder
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "net.masterthought:cucumber-reporting:5.7.4"
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.5.10'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -12,6 +25,7 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -21,6 +35,9 @@ ext {
     set('apacheCommonsLangVersions', "2.6")
     set('cucumberVersion', "7.5.0")
     set('h2Version', "1.4.200")
+    set('cucumberReportingVersion', "5.7.4")
+    set('jacocoCoreVersion', "0.8.6")
+    set('jacocoReportVersion', "0.8.6")
 }
 
 dependencies {
@@ -34,6 +51,7 @@ dependencies {
     // Swagger
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    implementation 'org.testng:testng:7.7.0'
 
     // PostgreSQL
     runtimeOnly 'org.postgresql:postgresql'
@@ -44,6 +62,8 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
     testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
     testImplementation "com.h2database:h2:${h2Version}"
+    testImplementation "org.jacoco:org.jacoco.core:${jacocoCoreVersion}"
+    testImplementation "org.jacoco:org.jacoco.report:${jacocoReportVersion}"
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
@@ -57,35 +77,33 @@ dependencies {
 
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "Caiuzu_crud"
-        property "sonar.organization", "caiuzu"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property 'sonar.exclusions',
-                "src/main/java/br/com/simple/crud/CrudApplication.java," +
-                        "src/main/java/br/com/simple/crud/config/**, " +
-                        "src/main/java/br/com/simple/crud/exception/**, " +
-                        "src/main/java/br/com/simple/crud/domain/dto/**, " +
-                        "src/main/java/br/com/simple/crud/domain/entity/**"
-
-    }
-}
-
-tasks.named('test') {
+//TODO: Ajustar o report  cucumber + junit para o sonarclouddo, que está sendo sobreescrito um pelo outro quando useJunitPlatform() está habilitado
+test {
     useJUnitPlatform()
-    test.finalizedBy jacocoTestReport
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    reports.html.destination = file("$buildDir/reports/tests")
+    reports.junitXml.destination = file("$buildDir/test-results")
 }
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = 'io.cucumber.core.cli.Main'
+            classpath = sourceSets.test.runtimeClasspath + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'json:build/cucumber/cucumber.json', 'src/test/resources/features']
+        }
+    }
+    //println("> debbugDir: ${project.buildDir}") //
+    //generateReport("${project.buildDir}/cucumber/cucumber.json", "${project.buildDir}/cucumber/cucumber-html-report")
+}
+
+jacocoTestReport.dependsOn processResources
 
 tasks.jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled false
-    }
-
     afterEvaluate {
-        getClassDirectories().from(files(classDirectories.files.collect {
+        classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: ["src/main/java/br/com/simple/crud/CrudApplication.java, " +
                                       "src/main/java/br/com/simple/crud/config/**, " +
@@ -94,5 +112,46 @@ tasks.jacocoTestReport {
                                       "src/main/java/br/com/simple/crud/domain/entity/**"]
             )
         }))
+    }
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+check.dependsOn test
+check.dependsOn cucumber
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Caiuzu_crud"
+        property "sonar.organization", "caiuzu"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.junit.reportsPath", "${project.buildDir}/test-results"
+        property "sonar.cucumber.reportsPaths", "${project.buildDir}/cucumber/cucumber.json"
+        property "sonar.coverage.exclusions", "**/cucumber/**,"
+        property 'sonar.exclusions',
+                "src/main/java/br/com/simple/crud/CrudApplication.java," +
+                        "src/main/java/br/com/simple/crud/config/**, " +
+                        "src/main/java/br/com/simple/crud/exception/**, " +
+                        "src/main/java/br/com/simple/crud/domain/dto/**, " +
+                        "src/main/java/br/com/simple/crud/domain/entity/**"
+    }
+}
+
+static def generateReport(String pathCucumber, String pathReport) {
+    try {
+        File reportOutputDirectory = new File(pathReport)
+        List<String> jsonReportFiles = new ArrayList<>()
+        jsonReportFiles.add(pathCucumber)
+        String buildProjectName = "crud"
+        Configuration configuration = new Configuration(reportOutputDirectory, buildProjectName)
+        ReportBuilder reportBuilder = new ReportBuilder(jsonReportFiles, configuration)
+        reportBuilder.generateReports()
+    } catch (Exception ignored) {
+
     }
 }
