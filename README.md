@@ -52,24 +52,24 @@
 > utilizadas no dia-a-dia.
 > Através de um CRUD simples, implementaremos os itens descritos abaixo.
 
-
-
 ### Tecnologias/Ferramentas Utilizadas no Projeto:
 
 <details>
 <summary>Tecnologias utilizadas e explicadas previamente no projeto <a href="https://github.com/Caiuzu/hello-world">hello-world</a>:</summary> 
 
-  - [x] Spring Initializr
-  - [x] Spring Boot
-  - [X] Gradle
-  - [X] Actuator
-  - [X] Springfox Swagger
-  - [X] JUnit 5
-  - [X] Cucumber
-  - [X] SonarCloud
-  - [X] CI/CD (GitHub Actions)
-  - [X] Commit Semântico
-  - [X] Discord Webhook
+- [X] [SDKMAN (Windows & Linux)]()
+- [x] [Spring Initializr](https://github.com/Caiuzu/hello-world#0-spring-initializr)
+- [x] [Spring Boot](https://github.com/Caiuzu/hello-world)
+- [X] [Gradle](https://github.com/Caiuzu/hello-world)
+- [X] [Actuator](https://github.com/Caiuzu/hello-world#1-actuator)
+- [X] [Springfox Swagger](https://github.com/Caiuzu/hello-world#2-springfox-swagger2)
+- [X] [JUnit 5](https://github.com/Caiuzu/hello-world#3-junit)
+- [X] [Cucumber](https://github.com/Caiuzu/hello-world#4-cucumber)
+- [X] [SonarCloud](https://github.com/Caiuzu/hello-world#7-integrações-discord-webhook)
+- [X] [CI/CD (GitHub Actions)](https://github.com/Caiuzu/hello-world#7-integrações-discord-webhook)
+- [X] [Commit Semântico](https://github.com/Caiuzu/hello-world#como-contribuir)
+- [X] [Discord Webhook](https://github.com/Caiuzu/hello-world#7-integrações-discord-webhook)
+- [X] [GitHooks (preparando commit lint e garantindo organização)]()
 
 </details>
 
@@ -80,14 +80,21 @@
 - [X] JUnit 5 (Complementando)
     - Considerar a utilização do Teste Unitário para tudo, menos entidades e controller( nos controllers utilizar teste
       de integração com cucumber)
+        - !!! sempre utilizar datable para passagem de dados/ "variaveis", pois o cucumber é na teoria vizualizado pela
+          equipe de QA e Negócios
+        - !!! facilitando a leitura e mudança de dados para test
+        - e pode também ser integrado com algumas ferramentas como por exemplo o jira cucucmber integration
+
 - [X] Docker
+    - [X] Docker Composer
     - [X] Portainer.io
     - [X] PostgreSQL
 
 - [ ] ORM
-    - [X] Hibernate
     - [X] JPA
-        - [X] Audited JPA Envers
+        - [ ] Audited JPA Envers
+        - [ ] Hibernate Envers
+    - [X] Hibernate
 
 - [ ] Testes
     - [ ] Mockito
@@ -99,8 +106,9 @@
     - [X] VO
     - [ ] Validator
     - [ ] Tratamento de Exceptions
+    - [ ] Builder
 
-- [ ] Heroku
+- [ ] Heroku (ver se não está pago)
 - [ ] New Relic
 
 </details>
@@ -158,7 +166,8 @@
   <summary>Entendendo e Configurando Docker Composer no projeto:</summary>
 
   ### 1.1. Preparando ambiente Docker:
-    - > Source: [Tutorial DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+    - >
+      Source: [Tutorial DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
       #### 1.1.1 — Instalando Docker
 
@@ -408,20 +417,74 @@
 
 ---
 
-```
-    public Student getById(final Long id) {
-        return studentRepository.getById(id); //.orElseThrow(StudentNotFoundException::new); Se necessário criar uma exception personalizada, utilizar o findById(), caso contrário utilizar o getById() que já retorna uma Exception genérica para EntityNotFound
-    }
-```
+## 3. ORM:
+
+- ### O que é:
+    - **ORM** é um acrônimo para "Object-Relational Mapping", sendo uma categoria de tecnologia que permite que um
+      aplicativo manipule dados em uma base de dados de maneira mais simples e intuitiva, usando objetos e classes em
+      vez de instruções SQL diretas.
+        - **JPA(Java Persistence API)**: É uma especificação de persistência de objetos que pode ser usada para
+          implementar uma ORM. Ela define uma maneira de mapear objetos do Java para tabelas em uma base de dados,
+          bem como uma maneira de recuperar e armazenar esses objetos de volta na base de dados. JPA é uma especificação
+          e não fornece uma implementação concreta dessa API.
+        - **Hibernate**: Já o Hibernate é uma biblioteca que fornece uma implementação concreta da API JPA, permitindo
+          que os desenvolvedores usem o Hibernate para mapear objetos do Java para tabelas em uma base de dados e
+          recuperar e armazenar esses objetos de volta na base de dados. Ou seja, pode ser usada como uma ORM. Hibernate
+          é uma das opções mais populares e amplamente utilizadas.
+
+
+- ### Configurando e Implementando JPA no projeto:
+  <details>
+  <summary>Configurando e Implementando JPA no projeto:</summary>
+
+  Para configurar o JPA com Hibernate em nosso projeto, seguiremos os seguintes passos:
+    - Adicionaremos as dependências do JPA e do PostgreSQL ao arquivo [build.gradle](./build.gradle) do projeto.
+    ```yaml
+        dependencies {
+          // Spring Boot
+          implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  
+          // PostgreSQL
+          runtimeOnly 'org.postgresql:postgresql'
+        }
+    ```
+    - Criaremos um arquivo [application.yml](./src/main/resources/application.yml) na raiz do projeto com as
+      configurações de conexão com o banco de dados.
+    ```yaml
+        spring:
+          datasource:
+            url: jdbc:postgresql://localhost:5432/crudDB
+            username: admin
+            password: admin
+            driver-class-name: org.postgresql.Driver
+            hikari:
+              connection-test-query: select 1
+          jpa:
+            hibernate:
+              ddl-auto: create
+            properties:
+              hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+                show_sql: true
+                use_sql_comments: true
+                jdbc:
+                  lob:
+                    non_contextual_creation: true
+    ```
+
+  </details>
+
+- ### Spring Quickstart:
+  > [Spring Quickstart](https://spring.io/quickstart)
 
 ## Tecnologias a serem estudadas em projetos futuros:
 
 - [ ] Json Patch
-- [ ] Builder
 - [ ] Spring Auth
 - [ ] Apache Kafka
 - [ ] Hystrix
-- [ ] Spark
+- [ ] Spark ( e TDD para RDD)
 - [ ] AWS (AWS LocalStack)
     - [ ] S3
     - [ ] EC2
@@ -431,7 +494,6 @@
 - [ ] Spring Cloud Config (Remote Configuration)
 - [ ] Spring Cloud Bus
 - [ ] Migrations (FlyWay vs Liquibase)
-- [ ] SDKMAN (Windows & Linux)
 
 ---
 
