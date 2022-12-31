@@ -80,10 +80,6 @@
 - [X] JUnit 5 (Complementando)
     - Considerar a utilização do Teste Unitário para tudo, menos entidades e controller( nos controllers utilizar teste
       de integração com cucumber)
-        - !!! sempre utilizar datable para passagem de dados/ "variaveis", pois o cucumber é na teoria vizualizado pela
-          equipe de QA e Negócios
-        - !!! facilitando a leitura e mudança de dados para test
-        - e pode também ser integrado com algumas ferramentas como por exemplo o jira cucucmber integration
 
 - [X] Docker
     - [X] Docker Composer
@@ -96,19 +92,19 @@
         - [ ] Hibernate Envers
     - [X] Hibernate
 
-- [ ] Testes
-    - [ ] Mockito
-    - [ ] Factory
+- [X] Testes
+    - [X] Mockito
+    - [X] Factory
 
-- [ ] Core
+- [X] Core
     - [X] Lombok
-    - [X] Pagination
-    - [X] VO
+    - [ ] Pagination
+    - [ ] VO
     - [ ] Validator
     - [ ] Tratamento de Exceptions
     - [ ] Builder
 
-- [ ] Heroku (ver se não está pago)
+- [ ] AWS
 - [ ] New Relic
 
 </details>
@@ -472,11 +468,239 @@
                   lob:
                     non_contextual_creation: true
     ```
+    - Em seguida criamos nossa [entidade](./src/main/java/br/com/simple/crud/domain/entity/Student.java) que será
+      nossa camada responsável por mapear os objetos do Java para tabelas no banco de dados.
+        - Anotaremos a classe com `@Entity` e iremos mapear os atributos para as colunas da tabela usando anotações como
+          `@Column`.
+    ```java
+        @Entity
+        public class Student {
+      
+        @Id
+        @Column(nullable = false)
+        @GeneratedValue(strategy = SEQUENCE, generator = "STUDENT_SEQ")
+        @EqualsAndHashCode.Include
+        private Long id;
+        
+            @Column(nullable = false)
+            @NotEmpty(message = "Nome não informado")
+            @Length(max = 10, message = "Nome muito extenso")
+            private String name;
+        // Getters e setters serão gerados pelo lombok (@Getter e @Setter)
+        //[...]
+        }
+
+    ```
+    - Agora, vamos criar a camada de [repository](./src/main/java/br/com/simple/crud/repository/StudentRepository.java),
+      que será responsável por acessar os dados no banco de dados. Para isso, crie uma interface que estenda
+      JpaRepository e especifique o tipo de entidade e o tipo de chave que ela utiliza. Por exemplo:
+    ```java
+        public interface StudentRepository extends JpaRepository<Student, Long> {
+        }
+    ```
+
+    - Para utilizar iremos realizar a injeção no Service desejado via construtor parametrizado.
+        - Como estamos utilizando lombok anotaremos nosso Service com @RequiredArgsConstructor;
+    ```java
+        @Service
+        @RequiredArgsConstructor
+        @Slf4j
+        public class StudentService {
+            private final StudentRepository studentRepository;
+            //[...]
+        }
+    ```
+    - Com essas etapas configuradas, o JPA estará pronto para ser usado no projeto Spring Boot com Gradle. Você poderá
+      acessar os dados no banco de dados usando os métodos do repositório, como `findById()`, `findAll()`, `save()`
+      e `delete()`. Além disso, você também pode criar consultas personalizadas usando a anotação `@Query` na interface
+      de repositório. Por exemplo:
+    ```java
+        public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+          @Query("SELECT p FROM Pessoa p WHERE p.nome = :nome")
+          List<Pessoa> findByNome(@Param("nome") String nome);
+        }
+    ```
+
+    - Essa consulta personalizada pode ser usada da seguinte maneira:
+    ```java
+        List<Pessoa> pessoas = repository.findByNome("Robson");
+    ```
+    - É importante lembrar ser necessário criar as tabelas no banco de dados manualmente ou automático (ddl-auto =
+      create) antes de tentar acessá-las usando o JPA.
 
   </details>
 
-- ### Spring Quickstart:
-  > [Spring Quickstart](https://spring.io/quickstart)
+- ### Mais Informações:
+  > [Learn JPA & Hibernate](https://www.baeldung.com/learn-jpa-hibernate)
+
+---
+
+## 4. LOMBOK:
+
+- ### O que é:
+    - **Lombok** é uma biblioteca de código aberto para Java que fornece uma série de anotações para gerar
+      automaticamente código boilerplate, como getters, setters, construtores e métodos `toString()`, `equals()` e
+      `hashCode()`. Isso pode tornar o processo de desenvolvimento de aplicativo Java mais rápido e mais fácil, pois
+      permite que os desenvolvedores evitem escrever código repetitivo manualmente.
+
+
+- ### Configurando e Implementando Lombok no projeto:
+  <details>
+  <summary>Configurando e Implementando Lombok no projeto:</summary>
+
+  Para adicionar o Lombok ao projeto, basta adicionar a dependência do Lombok ao arquivo [build.gradle](./build.gradle)
+  do projeto da seguinte forma:
+    ```yaml
+        dependencies {
+          // Lombok
+          compileOnly 'org.projectlombok:lombok'
+          annotationProcessor 'org.projectlombok:lombok'
+        }
+    ```
+    - Desta forma podemos usar as anotações do Lombok em nossas classes. Por exemplo, como em nossa
+      classe [Student](src/main/java/br/com/simple/crud/domain/entity/Student.java), para gerar `getters` e `setters`
+      automaticamente, adicionaremos a anotação `@Getter` e `@Setter` (removendo o Setter apenas do id):
+    ```java
+    //[...] outras anotações
+    @Getter
+    @Setter
+    public class Student {
+  
+        @Setter(AccessLevel.NONE)
+        private Long id;
+  
+        private String name;
+  
+        private String lastName;
+  
+        private Integer age;
+  
+    }
+    ```
+
+    </details>
+
+- ### Entendendo um pouco mais sobre Lombok:
+  <details>
+  <summary>Anotações mais utilizadas do Lombok:</summary>
+
+  Abaixo temos algumas das anotações mais utilizadas do Lombok:
+    - `@Getter`: Gera getters automaticamente para todos os atributos da classe.
+    - `@Setter`: Gera setters automaticamente para todos os atributos da classe.
+    - `@ToString`: Gera um método toString() automaticamente que retorna uma ‘string’ com os valores de todos os
+      atributos da classe.
+    - `@EqualsAndHashCode`: Gera os métodos equals() e hashCode() automaticamente conforme as regras padrão do Java.
+    - `@NoArgsConstructor`: Gera um construtor sem argumentos automaticamente.
+    - `@AllArgsConstructor`: Gera um construtor com argumentos para todos os atributos da classe.
+    - `@RequiredArgsConstructor`: Gera um construtor com argumentos apenas para os atributos marcados com @NonNull.
+    - `@Data`: Inclui todas as anotações @Getter, @Setter, @ToString, @EqualsAndHashCode e @RequiredArgsConstructor
+      em uma só, permitindo gerar getters, ‘setters’, um método toString(), métodos equals() e hashCode() e um
+      construtor com argumentos para os atributos marcados com @NonNull automaticamente.
+    - `@Value`: Similar à anotação @Data, mas cria uma classe imutável em vez de uma classe mutável. Isso significa
+      que os ‘setters’ não são gerados e os atributos só podem ser atribuídos no construtor.
+    - `@Builder`: Gera um builder para a classe, permitindo criar objetos da classe de forma fluida.
+    - `@SneakyThrows`: Permite lançar exceções checked de forma silenciosa, sem precisar declará-las no método.
+    - `@Synchronized`: Adiciona sincronização a um método, permitindo que ele seja chamado por apenas uma thread de
+      cada vez.
+    - `@Log`: Gera uma variável de log para a classe, permitindo logar mensagens usando o log4j ou outro framework
+      de log.
+  </details>
+
+- ### Mais Informações:
+  > [Project Lombok](https://projectlombok.org)
+  
+  > [Java 14 Record vs. Lombok](https://www.baeldung.com/java-record-vs-lombok) 
+
+  > [Introduction to Project Lombok](https://www.baeldung.com/intro-to-project-lombok)
+---
+
+## 5. Testes:
+
+- ### Retomando o assunto:
+    - No [projeto anterior](https://github.com/Caiuzu/hello-world) abordamos as configurações do Junit5 e Cucumber.
+      Neste, iremos entrar em alguns detalhes de implementação que nos leva a um novo passo devido o aumento da
+      complexidade da aplicação em questão.
+
+- ### Mergulhando no JUnit5 | Mockito:
+  <details>
+  <summary>Um pouco sobre Mockito:</summary>
+
+  **Mockito** é uma biblioteca de mocks para Java que permite criar objetos "falsos" ou "simulados" para testar o
+  código. Os
+  mocks são usados para simular o comportamento de dependências ou colaboradores de uma classe, permitindo que os testes
+  sejam isolados e focados em uma única unidade de código.
+
+  Isso é especialmente útil quando precisamos testar código
+  que depende de outras classes ou componentes que não estão disponíveis ou são difíceis de testar, como banco de dados,
+  APIs externas ou componentes de sistema.
+    - Para usar o Mockito em um projeto JUnit 5, basta adicionar a dependência do Mockito ao arquivo build.gradle do
+      projeto e importar a classe MockitoExtension no seu arquivo de teste. Por exemplo:
+    - Podemos observar a utilização do mock em nossa classe de
+      teste [StudentServiceTest](src/test/java/br/com/simple/crud/service/StudentServiceTest.java)
+  </details>
+
+- ### Mergulhando no JUnit5 | Factory:
+  <details>
+  <summary>Um pouco sobre Factory:</summary>
+
+  **Factory** são classes que criam objetos de outras classes de acordo com alguns parâmetros ou configurações. Isso é
+  útil para evitar a repetição de código na criação de objetos e para facilitar a configuração de objetos para testes.
+    - Temos algumas factories criadas no projeto como: `StudentFactory`, `StudentRequestDtoFactory`
+      e `StudentResponseDtoFactory`.
+    - Podemos observar a utilização do factory em nossa classe de
+      teste [StudentServiceTest](src/test/java/br/com/simple/crud/service/StudentServiceTest.java)
+
+  </details>
+
+- ### Mergulhando no Cucumber ( ͡° ͜ʖ ͡°) | Datatable:
+  <details>
+  <summary>Um pouco sobre Datatable:</summary>
+
+  Anteriormente no projeto [hello-world](https://github.com/Caiuzu/hello-world), vimos como configurar o cucumber no
+  projeto. Agora iremos complementar com uma técnica de passagem de dados, principalmente quando queremos representar
+  tableas ou objetos, o Datatable.
+
+  Sempre devemos utilizar o datable para passagem de dados/ "variaveis", pois o cucumber é na teoria vizualizado pela
+  equipe de QA e Negócios.
+    - Desta forma facilitando a leitura e mudança de dados para teste
+    - Pode também ser integrado com algumas ferramentas como, por exemplo, o jira cucucmber integration
+
+  No projeto podemos ver como é montado um [cenário de teste](src/test/resources/features/CrudFeatures.feature)
+  utilizando datatable:
+  ```gherkin
+  Cenário: Adiciona dado de um novo estudante
+    Dado que possuo as informações do estudante
+      | name   | last_name | age |
+      | Ragnar | L         | 18  |
+    Quando envio as informações do meu estudante
+    Então deverá ser cadastrado com sucesso
+  ```
+  Como o datatable é uma entrada de dado crua, precisamos criar um adaptador para utilizar esses dados. Desta forma,
+  criamos na
+  classe [StudentDataTableAdapter](src/test/java/br/com/simple/crud/cucumber/adapter/StudentDataTableAdapter.java) um
+  tratamento para
+  criar um StudentRequestDto apartir dos dados informados. Assim podendo ser utilizado normalmente na implementação
+  dos [Steps](src/test/java/br/com/simple/crud/cucumber/step/Steps.java).
+
+  ```java
+    public List<StudentRequestDto> createStudentList(final DataTable dataTable) {
+        return dataTable
+                .asMaps(String.class, String.class)
+                .stream()
+                .map(column -> {
+                    return new StudentRequestDto(column.get(NAME), column.get(LAST_NAME), Integer.parseInt(column.get(AGE)));
+                }).collect(Collectors.toList());
+    }
+  ```
+  </details>
+
+
+- ### Mais Informações:
+  > [Complete JUnit 5 Mockito Tutorial For Unit Testing](https://www.lambdatest.com/blog/junit5-mockito-tutorial/)
+
+  > [Cucumber Data Tables - baeldung](https://www.baeldung.com/cucumber-data-tables)
+
+---
 
 ## Tecnologias a serem estudadas em projetos futuros:
 
@@ -494,6 +718,7 @@
 - [ ] Spring Cloud Config (Remote Configuration)
 - [ ] Spring Cloud Bus
 - [ ] Migrations (FlyWay vs Liquibase)
+- [ ] Aplicar separação da camada de ORM(framework) da Entidade
 
 ---
 
