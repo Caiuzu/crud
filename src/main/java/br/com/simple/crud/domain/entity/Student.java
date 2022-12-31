@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -28,7 +27,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Getter
 @Setter
 @Builder
-@Audited
+//@Audited
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor
