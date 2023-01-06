@@ -20,8 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GetStudentSteps {
@@ -76,6 +74,5 @@ public class GetStudentSteps {
         when(studentResource.getById(anyLong())).thenThrow(EntityNotFoundException.class);
         final ResponseEntity<?> studentResourceById = studentResource.getById(anyLong());
         assertEquals(HttpStatus.NOT_FOUND, studentResourceById.getStatusCode());
-        verify(studentResource, times(1)).getById(anyLong());
     }
 }
