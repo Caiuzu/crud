@@ -8,7 +8,9 @@ import br.com.simple.crud.factory.StudentRequestDtoFactory;
 import br.com.simple.crud.factory.StudentResponseDtoFactory;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class StudentBuilderTest {
@@ -33,10 +35,11 @@ class StudentBuilderTest {
 
         final Student student = studentBuilder.toStudent(studentRequestDto);
 
-        assertNull(student.getId());
-        assertEquals(expectedStudent.getName(), student.getName());
-        assertEquals(expectedStudent.getLastName(), student.getLastName());
-        assertEquals(expectedStudent.getAge(), student.getAge());
+        assertAll(() -> assertNull(student.getId()),
+                () -> assertEquals(expectedStudent.getName(), student.getName()),
+                () -> assertEquals(expectedStudent.getLastName(), student.getLastName()),
+                () -> assertEquals(expectedStudent.getAge(), student.getAge())
+        );
     }
 
     @Test
@@ -46,9 +49,12 @@ class StudentBuilderTest {
 
         final StudentResponseDto studentResponseDto = studentBuilder.toStudentResponseDto(student);
 
-        assertEquals(expectedStudentResponseDto.getId(), studentResponseDto.getId());
-        assertEquals(expectedStudentResponseDto.getName(), studentResponseDto.getName());
-        assertEquals(expectedStudentResponseDto.getLastName(), studentResponseDto.getLastName());
-        assertEquals(expectedStudentResponseDto.getAge(), studentResponseDto.getAge());
+        assertAll(() -> assertNotNull(studentResponseDto),
+                () -> assertEquals(expectedStudentResponseDto.getId(), studentResponseDto.getId()),
+                () -> assertEquals(expectedStudentResponseDto.getName(), studentResponseDto.getName()),
+                () -> assertEquals(expectedStudentResponseDto.getLastName(), studentResponseDto.getLastName()),
+                () -> assertEquals(expectedStudentResponseDto.getAge(), studentResponseDto.getAge())
+        );
+
     }
 }
