@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Steps {
+public class CreateStudentSteps {
     private final StudentResource studentResource;
     private final StudentDataTableAdapter studentDataTableAdapter;
     private StudentRequestDto studentRequestDto;
@@ -21,7 +21,7 @@ public class Steps {
 
     private static final int FIRST_INDEX = 0;
 
-    public Steps(StudentResource studentResource, StudentDataTableAdapter studentDataTableAdapter) {
+    public CreateStudentSteps(StudentResource studentResource, StudentDataTableAdapter studentDataTableAdapter) {
         this.studentResource = studentResource;
         this.studentDataTableAdapter = studentDataTableAdapter;
     }
