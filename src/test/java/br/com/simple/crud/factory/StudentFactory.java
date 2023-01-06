@@ -11,8 +11,8 @@ import java.util.List;
 public class StudentFactory {
 
     public static final Long ID = 1L;
-    public static final String NAME = "RAGNAR";
-    public static final String NEW_NAME = "ODIN";
+    public static final String NAME = "Ragnar";
+    public static final String NEW_NAME = "Odin";
     public static final String LAST_NAME = "L";
     public static final String NEW_LAST_NAME = "G";
     public static final Integer AGE = 18;

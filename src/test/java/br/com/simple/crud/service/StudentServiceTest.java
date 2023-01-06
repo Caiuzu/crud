@@ -71,18 +71,23 @@ class StudentServiceTest {
         when(studentRepositoryMock.getById(anyLong())).thenReturn(expectedStudent);
         when(studentBuilderMock.toStudentResponseDto(any())).thenReturn(studentResponseDto);
 
-        final StudentResponseDto student = studentService.getById(ONE);
+        final StudentResponseDto studentResponseDtoResult = studentService.getById(ONE);
 
-        assertEquals(expectedStudent.getId(), student.getId());
-        assertEquals(expectedStudent.getAge(), student.getAge());
-        assertEquals(expectedStudent.getName(), student.getName());
-        assertEquals(expectedStudent.getLastName(), student.getLastName());
+        assertNotNull(studentResponseDtoResult);
+        assertEquals(expectedStudent.getId(), studentResponseDtoResult.getId());
+        assertEquals(expectedStudent.getName(), studentResponseDtoResult.getName());
+        assertEquals(expectedStudent.getLastName(), studentResponseDtoResult.getLastName());
+        assertEquals(expectedStudent.getAge(), studentResponseDtoResult.getAge());
+
+        verify(studentRepositoryMock, times(1)).getById(ONE);
+        verify(studentBuilderMock, times(1)).toStudentResponseDto(expectedStudent);
     }
 
     @Test
     void getStudentByIdThrowExceptionStudentNotFound() {
         when(studentRepositoryMock.getById(any())).thenThrow(EntityNotFoundException.class);
         assertThrows(EntityNotFoundException.class, () -> studentService.getById(ONE));
+        verify(studentRepositoryMock, times(1)).getById(any());
     }
 
     @Test
@@ -94,6 +99,7 @@ class StudentServiceTest {
         final Page<Student> studentsPage = studentService.findAll(pageable, ACTIVE_TRUE);
 
         assertEquals(expectedStudentsPage, studentsPage);
+        verify(studentRepositoryMock,times(1)).findAll(pageable);
     }
 
     @Test
@@ -193,6 +199,7 @@ class StudentServiceTest {
     void deleteStudentWithError() {
         doThrow(IllegalArgumentException.class).when(studentRepositoryMock).deleteById(any());
         assertThrows(IllegalArgumentException.class, () -> studentService.delete(any()));
+        verify(studentRepositoryMock, times(1)).deleteById(any());
     }
 
     @Test
@@ -272,5 +279,6 @@ class StudentServiceTest {
     void existsByIdWithError() {
         doThrow(IllegalArgumentException.class).when(studentRepositoryMock).existsById(anyLong());
         assertThrows(IllegalArgumentException.class, () -> studentService.existsById(anyLong()));
+        verify(studentRepositoryMock, times(1)).existsById(anyLong());
     }
 }
