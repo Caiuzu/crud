@@ -78,7 +78,7 @@
 <summary>Novas Tecnologias utilizadas neste projeto:</summary> 
 
 - [X] JUnit 5 (Complementando)
-    - Considerar a utilização do Teste Unitário para tudo, menos entidades e controller( nos controllers utilizar teste
+    - Considerar a utilização do Teste Unitário para tudo, menos entidades e controller(nos controllers utilizar teste
       de integração com cucumber)
 
 - [X] Docker
@@ -702,6 +702,23 @@
 
 ---
 
+## 6. Core:
+
+### 6.1.0 Pagination:
+
+
+### 6.2.0 DTO e VO:
+
+
+### 6.3.0 Validator:
+
+
+### 6.4.0 Tratamento de Exceptions:
+
+
+### 6.5.0 Builder
+
+
 ## Tecnologias a serem estudadas em projetos futuros:
 
 - [ ] Json Patch
@@ -763,3 +780,9 @@ de [commit semântico](https://blog.geekhunter.com.br/o-que-e-commit-e-como-usar
 </details>
 
 ---
+
+```
+    public Student getById(final Long id) {
+        return studentRepository.getById(id); //.orElseThrow(StudentNotFoundException::new); Se necessário criar uma exception personalizada, utilizar o findById(), caso contrário utilizar o getById() que já retorna uma Exception genérica para EntityNotFound
+    }
+```

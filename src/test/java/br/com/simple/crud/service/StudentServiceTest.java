@@ -39,7 +39,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class StudentServiceTest {
+public class StudentServiceTest {
     private StudentService studentService;
     private final StudentFactory studentFactory = new StudentFactory();
     private final StudentRequestDtoFactory studentRequestDtoFactory = new StudentRequestDtoFactory();
@@ -50,10 +50,10 @@ class StudentServiceTest {
 
     private final StudentRequestDto studentRequestDto = studentRequestDtoFactory.createStudent();
     private static final Long ONE = 1L;
-    private static final Integer PAGE = 1;
     private static final Integer SIZE = 3;
-    private static final Boolean ACTIVE_TRUE = true;
-    private static final Boolean ACTIVE_FALSE = false;
+    public static final Integer PAGE = 1;
+    public static final Boolean ACTIVE_TRUE = true;
+    public static final Boolean ACTIVE_FALSE = false;
 
     @BeforeEach
     public void init() {
